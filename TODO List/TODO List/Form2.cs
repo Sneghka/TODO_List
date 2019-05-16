@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Business_Layer;
+using System;
 using System.Windows.Forms;
 using TODO_List.Objects;
-using TODO_List.Utils;
 
 namespace TODO_List
 {
@@ -30,10 +30,11 @@ namespace TODO_List
             };
 
             Form1.items.itemList.Add(newTask);
-            WorkWithFile.TaskListToJson(Form1.items, @"D:\Sneghka\IT\Visual Studio\TODO List\Tasks.json");
+            Actions.SaveData(Form1.items.itemList);
+            //WorkWithFile.TaskListToJson(Form1.items, @"D:\Sneghka\IT\Visual Studio\TODO List\Tasks.json");
             this.Close();
             ItemsUpdated?.Invoke(this, e);
         }
-       
+
     }
 }

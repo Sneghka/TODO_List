@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Business_Layer;
+using System;
 using System.Windows.Forms;
 using TODO_List.Objects;
-using TODO_List.Utils;
 
 namespace TODO_List
 {
@@ -9,7 +9,7 @@ namespace TODO_List
     {
         public static Items items = new Items();
         private Item currentItem;
-
+       
         public Form1()
         {
             InitializeComponent();
@@ -17,7 +17,7 @@ namespace TODO_List
 
         public void Form1_Load(object sender, EventArgs e)
         {
-            items.itemList = WorkWithFile.LoadJson(@"D:\Sneghka\IT\Visual Studio\TODO List\Tasks.json");
+            items.itemList = Actions.LoadData<Item>(); ;
 
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.DataSource = null;
@@ -40,6 +40,7 @@ namespace TODO_List
         {
             doneButton.Enabled = comboBox1.SelectedIndex == -1 ? false : true;
             saveButton.Enabled = false;
+            currentItem = (Item)comboBox1.SelectedItem;
         }
 
         private void comboBox1_TextUpdate(object sender, EventArgs e)
@@ -53,8 +54,8 @@ namespace TODO_List
 
         private void saveButton_Click(object sender, EventArgs e)
         {            
-            currentItem.Name = comboBox1.Text;
-            WorkWithFile.TaskListToJson(Form1.items, @"D:\Sneghka\IT\Visual Studio\TODO List\Tasks.json");
+            currentItem.Name = comboBox1.Text;            
+            Actions.SaveData(Form1.items.itemList);
             Form1_Load(sender, e);
         }
 
@@ -62,7 +63,7 @@ namespace TODO_List
         {
             if(currentItem == null) currentItem = (Item)comboBox1.SelectedItem;
             currentItem.IsDone = true;
-            WorkWithFile.TaskListToJson(Form1.items, @"D:\Sneghka\IT\Visual Studio\TODO List\Tasks.json");
+            Actions.SaveData(Form1.items.itemList);
             Form1_Load(sender, e);
         }
     }
